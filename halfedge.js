@@ -78,10 +78,10 @@ function make_halfedge_mesh() {
                 var result = [0, 0, 0];
                 var cnt = 0;
                 this.vertices().forEach(function(v) {
-                    result = numeric.add(result, v.point);
+                    vec3.add_ip(result, v.point);
                     ++cnt;
                 });
-                return numeric.mul(result, 1 / cnt);
+                return vec3.scale_ip(result, result, 1 / cnt);
             };
             return face;
         };
@@ -227,10 +227,10 @@ function make_halfedge_mesh() {
                 var p0 = h.from_vertex().point;
                 var p1 = h.vertex.point;
                 var p2 = h.next.vertex.point;
-                var d1 = numeric.sub(p1, p0);
-                var d2 = numeric.sub(p2, p0);
+                var d1 = vec3.sub([], p1, p0);
+                var d2 = vec3.sub([], p2, p0);
                 var n = vec3.cross([], d1, d2);
-                f.normal = numeric.add(f.normal, n);
+                vec3.add_ip(f.normal, n);
             });
             vec3.normalize_ip(f.normal);
         });
@@ -238,7 +238,7 @@ function make_halfedge_mesh() {
         this.vertices.forEach(function(v, index){
             v.normal = [0, 0, 0];
             v.faces().forEach(function(f){
-                v.normal = numeric.add(v.normal, f.normal);
+                vec3.add_ip(v.normal, f.normal);
             });
             vec3.normalize_ip(v.normal);
         });

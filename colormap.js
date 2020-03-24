@@ -8,7 +8,7 @@ colormap._internal = function(colors, t) {
     var i = Math.floor(nt);
     var dt = nt - i;
     var j = i == n ? i : (i + 1);
-    return numeric.add(numeric.mul(colors[i], 1 - dt), numeric.mul(colors[j], dt));
+    return vec3.lerp([], colors[i], colors[j], dt);
 };
 // http://www.mathworks.com/matlabcentral/fileexchange/35242-matlab-plot-gallery-colormap-chart/content/html/Colormap_Chart.html
 colormap.parula = function(t) {

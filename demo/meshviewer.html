@@ -3,8 +3,6 @@
 <title id="title">legacygl.js Demo: Mesh Viewer</title>
 <script src="../gl-matrix.js"></script>
 <script src="../gl-matrix-util.js"></script>
-<script src="../numeric-1.2.6.js"></script>
-<script src="../numeric-util.js"></script>
 <script src="../legacygl.js"></script>
 <script src="../drawutil.js"></script>
 <script src="../camera.js"></script>
@@ -30,7 +28,7 @@ function draw() {
     if (!mesh) return;
     
     // projection and camera position
-    var zmin = numeric.norm2(camera.eye_to_center()) * 0.01;
+    var zmin = vec3.len(camera.eye_to_center()) * 0.01;
     var zmax = zmin * 10000;
     mat4.perspective(legacygl.uniforms.projectionMatrix.value, Math.PI / 6, canvas.aspect_ratio(), zmin, zmax);
     camera.lookAt(legacygl.uniforms.modelviewMatrix.value);
@@ -92,13 +90,13 @@ function draw() {
             legacygl.color(0.6, 0.3, 0);
             mesh.vertices.forEach(function(v){
                 legacygl.vertex3(v.point);
-                legacygl.vertex3(numeric.add(v.point, numeric.mul(v.normal, s)));
+                legacygl.vertex3(vec3.scaleAndAdd([], v.point, v.normal, s));
             });
             legacygl.color(0, 0.6, 0.3);
             mesh.faces.forEach(function(f){
                 var p = f.centroid();
                 legacygl.vertex3(p);
-                legacygl.vertex3(numeric.add(p, numeric.mul(f.normal, s)));
+                legacygl.vertex3(vec3.scaleAndAdd([], p, f.normal, s));
             });
             legacygl.end();
         });
@@ -183,7 +181,7 @@ function init() {
             bbox.extend(v.point);
         });
         camera.center = bbox.center();
-        camera.eye = numeric.add(camera.center, [0, 0, bbox.diagonal_norm() * 2]);
+        camera.eye = vec3.add([], camera.center, [0, 0, bbox.diagonal_norm() * 2]);
         camera.up = [0, 1, 0];
         displist_faces.invalidate();
         displist_edges.invalidate();

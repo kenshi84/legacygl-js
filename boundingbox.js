@@ -8,20 +8,20 @@ function make_boundingbox() {
     };
     bbox.set_empty();
     bbox.extend = function(p) {
-        this.min = numeric.min(this.min, p);
-        this.max = numeric.max(this.max, p);
+        this.min = vec3.min(this.min, this.min, p);
+        this.max = vec3.max(this.max, this.max, p);
     };
     bbox.diagonal = function() {
-        return numeric.sub(this.max, this.min);
+        return vec3.sub([], this.max, this.min);
     };
     bbox.diagonal_norm = function() {
-        return numeric.norm2(this.diagonal());
+        return vec3.len(this.diagonal());
     };
     bbox.center = function() {
-        return numeric.mul(numeric.add(this.max, this.min), 0.5);
+        return vec3.lerp([], this.max, this.min, 0.5);
     };
     bbox.is_empty = function() {
-        return !numeric.all(numeric.geq(this.max, this.min));
+        return !(this.min[0] < this.max[0] && this.min[1] < this.max[1] && this.min[2] < this.max[2]);
     };
     return bbox;
 }
