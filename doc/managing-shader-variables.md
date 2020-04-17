@@ -12,8 +12,8 @@ uniform int u_myint;
 uniform float u_myfloat;
 uniform vec2i u_myvec2i;
 uniform mat4 u_mymat4;
-attribute float a_myfloat;
-attribute vec3 a_myvec3;
+attribute float a_anotherfloat;
+attribute vec3 a_anothervec3;
 void main(void) {
     gl_Position = vec4(a_vertex, 1.0);
 }
@@ -62,21 +62,21 @@ legacygl.add_vertex_attribute(name, size);
 where `name` is the same as the one in the shader code without the prefix `a_`, and `size` is the number of numbers per vertex (e.g., 9 for `mat3`). For the above example code, the registration process would be:
 ```
 #!javascript
-legacygl.add_vertex_attribute("myfloat", 1);
-legacygl.add_vertex_attribute("myvec3", 3);
+legacygl.add_vertex_attribute("anotherfloat", 1);
+legacygl.add_vertex_attribute("anothervec3", 3);
 ```
 This automatically creates a function for each variable that changes its "current value". For example, you can do something like:
 ```
 #!javascript
-legacygl.myfloat(0.2);
+legacygl.anotherfloat(0.2);
 legacygl.begin(gl.TRIANGLES);
-legacygl.myvec3(1, -2, 3);
+legacygl.anothervec3(1, -2, 3);
 legacygl.vertex(0, 0, 0);
 
-legacygl.myvec3(2, 3, 0);
+legacygl.anothervec3(2, 3, 0);
 legacygl.vertex(1, 0, 0);
 
-legacygl.myfloat(-0.5);
+legacygl.anotherfloat(-0.5);
 legacygl.vertex(0, 0, 1);
 legacygl.end();
 ```

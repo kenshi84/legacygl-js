@@ -122,4 +122,4 @@ https://legacygl-js.glitch.me/demo/hello3d.html
     - https://legacygl-js.glitch.me/demo/meshviewer.html
 
 ### Tutorial ###
-- [Managing Shader Variables](https://bitbucket.org/kenshi84/legacygl.js/src/6f180a007849e7d3412f68d9d351e7cee96507ce/doc/tutorial-managing-shader-variables.md)
+- [Managing Shader Variables](doc/managing-shader-variables.md)
