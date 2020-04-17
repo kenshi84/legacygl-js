@@ -10,7 +10,7 @@ OpenGL style coding using the deprecated APIs (e.g., glBegin, glPushMatrix, GL_Q
 <html>
 <head>
 <title>legacygl.js Demo: Hello World 3D</title>
-<script src="../gl-matrix.js"></script>
+<script src="https://cdn.rawgit.com/toji/gl-matrix/v3.3.0/dist/gl-matrix.js"></script>
 <script src="../gl-matrix-util.js"></script>
 <script src="../legacygl.js"></script>
 <script src="../drawutil.js"></script>
@@ -105,21 +105,21 @@ function init() {
 </body>
 </html>
 ```
-http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/6f180a007849e7d3412f68d9d351e7cee96507ce/demo/hello3d.html
+https://legacygl-js.glitch.me/demo/hello3d.html
 
 ### Demos ###
 - Hello World 2D
-    - http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/6f180a007849e7d3412f68d9d351e7cee96507ce/demo/hello2d.html
+    - https://legacygl-js.glitch.me/demo/hello2d.html
 - Pick/Move Objects in 3D
-    - http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/6f180a007849e7d3412f68d9d351e7cee96507ce/demo/pick3d.html
+    - https://legacygl-js.glitch.me/demo/pick3d.html
 - Pick/Move Objects in 2D
-    - http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/6f180a007849e7d3412f68d9d351e7cee96507ce/demo/pick2d.html
+    - https://legacygl-js.glitch.me/demo/pick2d.html
 - Z-Buffer
-    - http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/6f180a007849e7d3412f68d9d351e7cee96507ce/demo/z-buffer.html
+    - https://legacygl-js.glitch.me/demo/z-buffer.html
 - Display List
-    - http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/6f180a007849e7d3412f68d9d351e7cee96507ce/demo/displist.html
+    - https://legacygl-js.glitch.me/demo/displist.html
 - Mesh Viewer
-    - http://htmlpreview.github.io/?https://bitbucket.org/kenshi84/legacygl.js/raw/1ecf5864563c0eedba6fddf46af0afbc2e0cfc4c/demo/meshviewer.html
+    - https://legacygl-js.glitch.me/demo/meshviewer.html
 
 ### Tutorial ###
 - [Managing Shader Variables](https://bitbucket.org/kenshi84/legacygl.js/src/6f180a007849e7d3412f68d9d351e7cee96507ce/doc/tutorial-managing-shader-variables.md)
