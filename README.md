@@ -120,6 +120,8 @@ https://legacygl-js.glitch.me/demo/hello3d.html
     - https://legacygl-js.glitch.me/demo/displist.html
 - Mesh Viewer
     - https://legacygl-js.glitch.me/demo/meshviewer.html
+- Texturing
+    - https://legacygl-js.glitch.me/demo/texture.html
 
 ### Tutorial ###
 - [Managing Shader Variables](doc/managing-shader-variables.md)
