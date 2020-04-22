@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>Simple Texturing Demo</title>
+<script src="https://cdn.rawgit.com/toji/gl-matrix/v3.3.0/dist/gl-matrix.js"></script>
+<script src="../gl-matrix-util.js"></script>
+<script src="../legacygl.js"></script>
+<script src="../camera.js"></script>
+<script src="../util.js"></script>
+<script type="text/javascript">
+var gl;
+var canvas;
+var legacygl;
+var camera;
+var texture;
+var img_texture;
+
+function draw() {
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // projection and camera position
+    mat4.perspective(legacygl.uniforms.projection.value, Math.PI / 6, canvas.aspect_ratio(), 0.001, 100);
+    camera.lookAt(legacygl.uniforms.modelview.value);
+    // draw quad
+    legacygl.begin(legacygl.QUADS);
+    legacygl.texCoord(0, 0); legacygl.vertex(-1, 0, -1);
+    legacygl.texCoord(10, 0); legacygl.vertex(-1, 0,  1);
+    legacygl.texCoord(10, 10); legacygl.vertex( 1, 0,  1);
+    legacygl.texCoord(0, 10); legacygl.vertex( 1, 0, -1);
+    legacygl.end();
+};
+function init() {
+    // OpenGL context
+    canvas = document.getElementById("canvas");
+    gl = canvas.getContext("experimental-webgl");
+    if (!gl)
+        alert("Could not initialize WebGL!");
+    var vertex_shader_src = "\
+        attribute vec3 a_vertex;\
+        attribute vec2 a_texCoord;\
+        varying vec2 v_texCoord;\
+        uniform mat4 u_modelview;\
+        uniform mat4 u_projection;\
+        void main(void) {\
+            gl_Position = u_projection * u_modelview * vec4(a_vertex, 1.0);\
+            v_texCoord = a_texCoord;\
+        }\
+        ";
+    var fragment_shader_src = "\
+        precision mediump float;\
+        uniform sampler2D u_texture;\
+        varying vec2 v_texCoord;\
+        void main(void) {\
+            gl_FragColor = texture2D(u_texture, v_texCoord);\
+        }\
+        ";
+    legacygl = get_legacygl(gl, vertex_shader_src, fragment_shader_src);
+    legacygl.add_uniform("modelview", "Matrix4f");
+    legacygl.add_uniform("projection", "Matrix4f");
+    legacygl.add_uniform("texture", "1i");
+    legacygl.add_vertex_attribute("texCoord", 2);
+    camera = get_camera(canvas.width);
+    camera.eye = [0, 0.07, -0.3];
+    // event handlers
+    canvas.onmousedown = function(evt) {
+        camera.start_moving(this.get_mousepos(evt), evt.shiftKey ? "zoom" : evt.ctrlKey ? "pan" : "rotate");
+    };
+    canvas.onmousemove = function(evt) {
+        if (camera.is_moving()) {
+            camera.move(this.get_mousepos(evt));
+            draw();
+        }
+    };
+    document.onmouseup = function(evt) {
+        if (camera.is_moving()) {
+            camera.finish_moving();
+        }
+    };
+    // init OpenGL settings
+    gl.enable(gl.DEPTH_TEST);
+    gl.clearColor(0, 0, 0, 1);
+    // ini ttexture
+    img_texture = document.getElementById("img_texture");
+    img_texture.onload = function () {
+        texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        draw();
+    };
+    img_texture.crossOrigin = "anonymous";
+    img_texture.src = "./data/cobblestone.png";
+};
+</script>
+</head>
+<body onload="init(); draw();">
+    <h2>Simple Texturing Demo</h2>
+    <canvas id="canvas" width="640" height="480" style="border:1px solid #000000;"></canvas>
+    <img id="img_texture">
+    <h3>Camera Control:</h3>
+    <ul>
+        <li>Drag: Rotate</li>
+        <li>Shift+Drag: Zoom</li>
+        <li>Ctrl+Drag: Pan</li>
+    </ul>
+</body>
+</html>
