@@ -81,7 +81,7 @@ function make_halfedge_mesh() {
                     vec3.add_ip(result, v.point);
                     ++cnt;
                 });
-                return vec3.scale_ip(result, result, 1 / cnt);
+                return vec3.scale_ip(result, 1 / cnt);
             };
             return face;
         };
