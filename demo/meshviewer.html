@@ -46,7 +46,7 @@ function draw() {
     
     // mesh faces
     legacygl.uniforms.use_material.push();
-    legacygl.uniforms.use_material.value = document.getElementById("check_flat").checked ? 0 : 1;
+    legacygl.uniforms.use_material.value = document.getElementById("check_noshade").checked ? 0 : 1;
     displist_faces.draw(function() {
         legacygl.color(0, 0.7, 1);
         if (document.getElementsByName("radio_normal")[2].checked)
@@ -285,7 +285,7 @@ function init() {
     </ul>
     <li>Draw Options</li>
     <ul>
-        <li><input type="checkbox" id="check_flat" onchange="draw()">Use Flat Shading</li>
+        <li><input type="checkbox" id="check_noshade" onchange="draw()">No Shading</li>
         <li><input type="checkbox" id="check_edges" checked onchange="draw()">Show Edges</li>
         <li><input type="checkbox" id="check_normals" onchange="draw()">Show Normals</li>
         <li>Normal</li>
