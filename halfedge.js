@@ -192,7 +192,12 @@ function make_halfedge_mesh() {
         });
     };
     mesh.init_ids = function() {
-        this.vertices.forEach(function(v, i) { v.id = i; });
+        // make vertices a contiguous array
+        var vid_max = Math.max(...Object.keys(this.vertices));
+        for (var vid = 0; vid <= vid_max; ++vid) {
+            if (this.vertices[vid] === undefined) this.vertices[vid] = {};
+          this.vertices[vid].id = vid;
+        }
         this.faces.forEach(function(f, i) { f.id = i; });
         this.edges_forEach(function(e, i) { e.id = i; });
         this.halfedges_forEach(function(h, i) { h.id = i; });
@@ -237,6 +242,7 @@ function make_halfedge_mesh() {
         // per-vertex
         this.vertices.forEach(function(v, index){
             v.normal = [0, 0, 0];
+            if (v.faces === undefined) return;
             v.faces().forEach(function(f){
                 vec3.add_ip(v.normal, f.normal);
             });
