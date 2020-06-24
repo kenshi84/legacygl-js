@@ -10,12 +10,12 @@ OpenGL style coding using the deprecated APIs (e.g., glBegin, glPushMatrix, GL_Q
 <html>
 <head>
 <title>legacygl.js Demo: Hello World 3D</title>
-<script src="https://cdn.rawgit.com/toji/gl-matrix/v3.3.0/dist/gl-matrix.js"></script>
-<script src="../gl-matrix-util.js"></script>
-<script src="../legacygl.js"></script>
-<script src="../drawutil.js"></script>
-<script src="../camera.js"></script>
-<script src="../util.js"></script>
+<script src="https://rawcdn.githack.com/toji/gl-matrix/v3.3.0/dist/gl-matrix-min.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/gl-matrix-util.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/legacygl.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/drawutil.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/camera.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/util.js"></script>
 <script type="text/javascript">
 var gl;
 var canvas;
@@ -105,23 +105,23 @@ function init() {
 </body>
 </html>
 ```
-https://legacygl-js.glitch.me/demo/hello3d.html
+https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/hello3d.html
 
 ### Demos ###
 - Hello World 2D
-    - https://legacygl-js.glitch.me/demo/hello2d.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/hello2d.html
 - Pick/Move Objects in 3D
-    - https://legacygl-js.glitch.me/demo/pick3d.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/pick3d.html
 - Pick/Move Objects in 2D
-    - https://legacygl-js.glitch.me/demo/pick2d.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/pick2d.html
 - Z-Buffer
-    - https://legacygl-js.glitch.me/demo/z-buffer.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/z-buffer.html
 - Display List
-    - https://legacygl-js.glitch.me/demo/displist.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/displist.html
 - Mesh Viewer
-    - https://legacygl-js.glitch.me/demo/meshviewer.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/meshviewer.html
 - Texturing
-    - https://legacygl-js.glitch.me/demo/texture.html
+    - https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/demo/texture.html
 
 ### Tutorial ###
 - [Managing Shader Variables](doc/managing-shader-variables.md)
