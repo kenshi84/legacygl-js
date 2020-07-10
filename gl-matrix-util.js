@@ -28,6 +28,7 @@ var vec3 = vec3__;
 var vec4 = vec4__;
 
 // mat2 in-place versions
+mat2.add_ip = function(a, b) { return mat2.add(a, a, b); };
 mat2.adjoint_ip = function(a) { return mat2.adjoint(a, a); };
 mat2.invert_ip = function(a) { return mat2.invert(a, a); };
 mat2.mul_ip = function(a, b) { return mat2.mul(a, a, b); };
@@ -38,6 +39,7 @@ mat2.translate_ip = function(a, v) { return mat2.translate(a, a, v); };
 mat2.transpose_ip = function(a) { return mat2.transpose(a, a); };
 
 // mat3 in-place versions
+mat3.add_ip = function(a, b) { return mat3.add(a, a, b); };
 mat3.adjoint_ip = function(a) { return mat3.adjoint(a, a); };
 mat3.invert_ip = function(a) { return mat3.invert(a, a); };
 mat3.mul_ip = function(a, b) { return mat3.mul(a, a, b); };
@@ -48,6 +50,7 @@ mat3.translate_ip = function(a, v) { return mat3.translate(a, a, v); };
 mat3.transpose_ip = function(a) { return mat3.transpose(a, a); };
 
 // mat4 in-place versions
+mat4.add_ip = function(a, b) { return mat4.add(a, a, b); };
 mat4.adjoint_ip = function(a) { return mat4.adjoint(a, a); };
 mat4.invert_ip = function(a) { return mat4.invert(a, a); };
 mat4.mul_ip = function(a, b) { return mat4.mul(a, a, b); };
