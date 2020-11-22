@@ -6,26 +6,72 @@
 <script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/legacygl.js"></script>
 <script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/camera.js"></script>
 <script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/util.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/halfedge.js"></script>
+<script src="https://bbcdn.githack.com/kenshi84/legacygl.js/raw/master/meshio.js"></script>
 <script type="text/javascript">
 var gl;
 var canvas;
 var legacygl;
 var camera;
-var texture;
-var img_texture;
+var texturePretzel;
+var textureWood;
+var img_texturePretzel;
+var img_textureWood;
+var mesh;
+var displist;
 
 function draw() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    if (!mesh) return;
+
     // projection and camera position
     mat4.perspective(legacygl.uniforms.projection.value, Math.PI / 6, canvas.aspect_ratio(), 0.001, 100);
     camera.lookAt(legacygl.uniforms.modelview.value);
     // draw quad
+    gl.bindTexture(gl.TEXTURE_2D, textureWood);
     legacygl.begin(legacygl.QUADS);
-    legacygl.texCoord(0, 0); legacygl.vertex(-1, 0, -1);
-    legacygl.texCoord(10, 0); legacygl.vertex(-1, 0,  1);
-    legacygl.texCoord(10, 10); legacygl.vertex( 1, 0,  1);
-    legacygl.texCoord(0, 10); legacygl.vertex( 1, 0, -1);
+    legacygl.texCoord(0.0, 0.0);      legacygl.vertex(-20, -15, 0);
+    legacygl.texCoord(0.5, 0.0);      legacygl.vertex( 20, -15, 0);
+    legacygl.texCoord(0.5, 0.5);      legacygl.vertex( 20,  15, 0);
+    legacygl.texCoord(0.0, 0.5);      legacygl.vertex(-20,  15, 0);
     legacygl.end();
+
+    // draw mesh
+    gl.bindTexture(gl.TEXTURE_2D, texturePretzel);
+    displist.draw(function() {
+        legacygl.begin(gl.TRIANGLES);
+        mesh.faces.forEach(function(f) {
+            if (f.degree() != 3) return;
+            f.halfedges().forEach(function(he){
+                var v = he.from_vertex();
+                legacygl.texCoord2(he.texcoord);
+                legacygl.vertex3(v.point);
+            });
+        });
+        legacygl.end();
+        legacygl.begin(legacygl.QUADS);
+        mesh.faces.forEach(function(f) {
+            if (f.degree() != 4) return;
+            f.halfedges().forEach(function(he){
+                var v = he.from_vertex();
+                legacygl.texCoord2(he.texcoord);
+                legacygl.vertex3(v.point);
+            });
+        });
+        legacygl.end();
+        mesh.faces.forEach(function(f) {
+            if (f.degree() == 3) return;
+            if (f.degree() == 4) return;
+            legacygl.begin(gl.TRIANGLE_FAN);
+            f.halfedges().forEach(function(he){
+                var v = he.from_vertex();
+                legacygl.texCoord2(he.texcoord);
+                legacygl.vertex3(v.point);
+            });
+            legacygl.end();
+        });
+        legacygl.disable(legacygl.AUTO_NORMAL);
+    });
 };
 function init() {
     // OpenGL context
@@ -55,10 +101,17 @@ function init() {
     legacygl = get_legacygl(gl, vertex_shader_src, fragment_shader_src);
     legacygl.add_uniform("modelview", "Matrix4f");
     legacygl.add_uniform("projection", "Matrix4f");
-    legacygl.add_uniform("texture", "1i");
+    legacygl.add_uniform("texturePretzel", "1i");
     legacygl.add_vertex_attribute("texCoord", 2);
+    legacygl.vertex3 = function(p) {
+        this.vertex(p[0], p[1], p[2]);
+    };
+    legacygl.texCoord2 = function(p) {
+        this.texCoord(p[0], p[1]);
+    };
     camera = get_camera(canvas.width);
-    camera.eye = [0, 0.07, -0.3];
+    camera.eye = [16, -32, 30];
+    camera.up = [-0.2, 0.5, 0.8];
     // event handlers
     canvas.onmousedown = function(evt) {
         camera.start_moving(this.get_mousepos(evt), evt.shiftKey ? "zoom" : evt.ctrlKey ? "pan" : "rotate");
@@ -76,27 +129,54 @@ function init() {
     };
     // init OpenGL settings
     gl.enable(gl.DEPTH_TEST);
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(1, 1, 1, 1);
     // ini ttexture
-    img_texture = document.getElementById("img_texture");
-    img_texture.onload = function () {
-        texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
+    img_texturePretzel = document.getElementById("img_texturePretzel");
+    img_texturePretzel.onload = function () {
+        texturePretzel = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texturePretzel);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         draw();
     };
-    img_texture.crossOrigin = "anonymous";
-    img_texture.src = "./data/cobblestone.png";
+    img_texturePretzel.crossOrigin = "anonymous";
+    img_texturePretzel.src = "https://cdn.glitch.com/13696316-44e5-40d1-b312-830e260e4817%2FBig_Pretzel_on_napkin_diffuse.jpg?v=1606026116899";
+
+    img_textureWood = document.getElementById("img_textureWood");
+    img_textureWood.onload = function () {
+        textureWood = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, textureWood);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        draw();
+    };
+    img_textureWood.crossOrigin = "anonymous";
+    img_textureWood.src = "https://cdn.glitch.com/13696316-44e5-40d1-b312-830e260e4817%2Fwood.jpg?v=1606029990878";
+
+    var mesh_filename = "https://cdn.glitch.com/13696316-44e5-40d1-b312-830e260e4817%2F13933_Big_Pretzel_on_Napkin_v3_l2.obj?v=1606026608596";
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", mesh_filename, true);
+    xhr.onload = function() {
+        if (this.status == 200) {
+            mesh = meshio.read_obj(this.response);
+            draw();
+        }
+    };
+    xhr.send();
+
+    displist = legacygl.displist_wrapper("displist");
 };
 </script>
 </head>
 <body onload="init(); draw();">
     <h2>Simple Texturing Demo</h2>
     <canvas id="canvas" width="640" height="480" style="border:1px solid #000000;"></canvas>
-    <img id="img_texture">
+    <img id="img_texturePretzel" style="height:400; width:auto">
+    <img id="img_textureWood" style="height:400; width:auto">
     <h3>Camera Control:</h3>
     <ul>
         <li>Drag: Rotate</li>
