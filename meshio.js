@@ -4,8 +4,10 @@ var meshio = {};
 meshio.read_obj = function(file_content) {
     var mesh = make_halfedge_mesh();
     var points = [];
+    var normals = [];
+    var texcoords = [];
     file_content.split("\n").forEach(function(line) {
-        var tokens = line.trim().split(" ");
+        var tokens = line.trim().split(/\s+/);
         if (tokens.length < 4 || tokens[0][0] == "#") return;
         var head = tokens[0];
         if (head == "v") {
@@ -13,11 +15,40 @@ meshio.read_obj = function(file_content) {
             var y = parseFloat(tokens[2]);
             var z = parseFloat(tokens[3]);
             points.push([x, y, z]);
+        } else if (head == "vn") {
+            var x = parseFloat(tokens[1]);
+            var y = parseFloat(tokens[2]);
+            var z = parseFloat(tokens[3]);
+            normals.push([x, y, z]);
+        } else if (head == "vt") {
+            var u = parseFloat(tokens[1]);
+            var v = parseFloat(tokens[2]);
+            texcoords.push([u, v]);
         } else if (head == "f") {
             var fv_indices = [];
-            for (var i = 1; i < tokens.length; ++i)
-                fv_indices.push(parseInt(tokens[i]) - 1);
-            mesh.add_face(fv_indices);
+            var face_texcoords = [];
+            var face_normals = [];
+            for (var i = 1; i < tokens.length; ++i) {
+                var tokens2 = tokens[i].split("/");
+                fv_indices.push(parseInt(tokens2[0]) - 1);
+                if (tokens2.length > 1 && tokens2[1].length > 0) {
+                    var vt_idx = parseInt(tokens2[1]) - 1;
+                    if (vt_idx < texcoords.length)
+                        face_texcoords.push(texcoords[vt_idx]);
+                }
+                if (tokens2.length > 2 && tokens2[2].length > 0) {
+                    var vn_idx = parseInt(tokens2[2]) - 1;
+                    if (vn_idx < normals.length)
+                        face_normals.push(normals[vn_idx]);
+                }
+            }
+            if (face_normals.length != fv_indices.length) {
+                face_normals = null;
+            }
+            if (face_texcoords.length != fv_indices.length) {
+                face_texcoords = null;
+            }
+            mesh.add_face(fv_indices, face_normals, face_texcoords);
         }
     });
     for (var i = 0; i < points.length; ++i)

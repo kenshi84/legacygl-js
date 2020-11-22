@@ -7,7 +7,7 @@ function make_halfedge_mesh() {
         halfedges: {},
         edges    : {},
     };
-    mesh.add_face = function(fv_indices) {
+    mesh.add_face = function(fv_indices, face_normals, face_texcoords) {
         // element constructors >>>>
         function make_vertex() {
             var vertex = {
@@ -45,6 +45,9 @@ function make_halfedge_mesh() {
             vertex.is_boundary = function() {
                 return this.halfedge.is_boundary();
             };
+            vertex.degree = function() {
+                return this.outgoing_halfedges().length;
+            }
             return vertex;
         };
         function make_face() {
@@ -83,6 +86,9 @@ function make_halfedge_mesh() {
                 });
                 return vec3.scale_ip(result, 1 / cnt);
             };
+            face.degree = function() {
+                return this.halfedges().length;
+            }
             return face;
         };
         function make_halfedge() {
@@ -92,7 +98,9 @@ function make_halfedge_mesh() {
                 edge: null,
                 next: null,
                 prev: null,
-                opposite: null
+                opposite: null,
+                texcoord: null,
+                normal: null,
             };
             halfedge.from_vertex = function() {
                 return this.opposite.vertex;
@@ -121,6 +129,15 @@ function make_halfedge_mesh() {
             return edge;
         };
         // <<<< element constructors
+        // check the size consistency for face_normals & face_texcoords
+        if (face_normals && face_normals.length != fv_indices.length) {
+            console.log("The size of face_normals is inconsistent with fv_indices");
+            return;
+        }
+        if (face_texcoords && face_texcoords.length != fv_indices.length) {
+            console.log("The size of face_texcoords is inconsistent with fv_indices");
+            return;
+        }
         // check for existence of nonmanifold edges
         for (var k = 0; k < fv_indices.length; ++k) {
             var i = fv_indices[k];
@@ -178,6 +195,23 @@ function make_halfedge_mesh() {
             var h12 = this.halfedges[i1 + ":" + i2];
             h01.next = h12;
             h12.prev = h01;
+        }
+        // set normal & texcoord for from_vertex of each halfedge
+        for (var k = 0; k < fv_indices.length; ++k) {
+            var i = fv_indices[k];
+            var j = fv_indices[(k + 1) % fv_indices.length];
+            var h_key = i + ":" + j;
+            var h = this.halfedges[h_key];
+            if (!h) {
+                console.log("Something weird is happening!");
+                return;
+            }
+            if (face_normals) {
+                h.normal = face_normals[k];
+            }
+            if (face_texcoords) {
+                h.texcoord = face_texcoords[k];
+            }
         }
         this.faces.push(face);
     };
