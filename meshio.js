@@ -100,7 +100,7 @@ meshio.read_off = function(file_content) {
     for (var i = 0; i < points.length; ++i)
         mesh.vertices[i].point = points[i];
     mesh.init_ids();
-    mesh.init_boundaries()();
+    mesh.init_boundaries();
     return mesh;
 };
 meshio.read = function(filename, content) {
