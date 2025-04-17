@@ -242,8 +242,10 @@ function make_halfedge_mesh() {
     mesh.init_boundaries = function() {
         // make sure that boundary vertex is linked to boundary halfedge, next/prev ordering between boundary halfedges
         this.halfedges_forEach(function(h){
-            if (h.is_boundary())
+            if (h.is_boundary()) {
                 h.from_vertex().halfedge = h;
+                h.edge.halfedge = h;
+            }
         });
         this.halfedges_forEach(function(h){
             if (h.is_boundary()) {
