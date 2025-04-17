@@ -27,6 +27,15 @@ var vec2 = vec2__;
 var vec3 = vec3__;
 var vec4 = vec4__;
 
+// sum functions
+mat2.sum = function(as) { var sum = mat2.create(); for (var i = 0; i < as.length; i++) mat2.add(sum, sum, as[i]); return sum; };
+mat3.sum = function(as) { var sum = mat3.create(); for (var i = 0; i < as.length; i++) mat3.add(sum, sum, as[i]); return sum; };
+mat4.sum = function(as) { var sum = mat4.create(); for (var i = 0; i < as.length; i++) mat4.add(sum, sum, as[i]); return sum; };
+vec2.sum = function(as) { var sum = vec2.create(); for (var i = 0; i < as.length; i++) vec2.add(sum, sum, as[i]); return sum; };
+vec3.sum = function(as) { var sum = vec3.create(); for (var i = 0; i < as.length; i++) vec3.add(sum, sum, as[i]); return sum; };
+vec4.sum = function(as) { var sum = vec4.create(); for (var i = 0; i < as.length; i++) vec4.add(sum, sum, as[i]); return sum; };
+quat.sum = function(as) { var sum = quat.create(); for (var i = 0; i < as.length; i++) quat.add(sum, sum, as[i]); return sum; };
+
 // mat2 in-place versions
 mat2.add_ip = function(a, b) { return mat2.add(a, a, b); };
 mat2.adjoint_ip = function(a) { return mat2.adjoint(a, a); };
