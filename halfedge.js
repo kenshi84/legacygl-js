@@ -126,6 +126,9 @@ function make_halfedge_mesh() {
             edge.is_boundary= function() {
                 return this.halfedges().some(function(h) { return h.is_boundary(); });
             };
+            edge.midpoint = function() {
+                return vec3.scale_ip(vec3.add([], this.halfedge.from_vertex().point, this.halfedge.vertex.point), 0.5);
+            }
             return edge;
         };
         // <<<< element constructors
