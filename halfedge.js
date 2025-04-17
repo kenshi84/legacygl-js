@@ -13,7 +13,8 @@ function make_halfedge_mesh() {
             var vertex = {
                 halfedge: null,
                 point: null,
-                normal: null
+                normal: null,
+                valid: true
             };
             vertex.outgoing_halfedges = function() {
                 var result = [];
